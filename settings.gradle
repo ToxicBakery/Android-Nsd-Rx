@@ -1,2 +1,2 @@
-include ':library'
+include ':android-nsd-rx'
 include ':app'

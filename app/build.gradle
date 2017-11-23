@@ -9,6 +9,7 @@ repositories {
 
 android {
     compileSdkVersion 27
+    buildToolsVersion = "27.0.1"
     defaultConfig {
         applicationId "com.toxicbakery.application.nsd.rx"
         minSdkVersion 16
@@ -30,7 +31,7 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
 
-    implementation project(":library")
+    implementation project(":android-nsd-rx")
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     implementation "io.reactivex.rxjava2:rxjava:2.1.6"
     implementation "io.reactivex.rxjava2:rxandroid:2.0.1"
