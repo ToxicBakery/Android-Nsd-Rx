@@ -1,6 +1,11 @@
 # Android Network Service Discovery Rx [![CircleCI](https://circleci.com/gh/ToxicBakery/Android-Nsd-Rx.svg?style=svg)](https://circleci.com/gh/ToxicBakery/Android-Nsd-Rx)
 An Rx wrapper around the Android [NsdManager](https://developer.android.com/reference/android/net/nsd/NsdManager.html) api.
 
+## Install
+```groovy
+implementation 'com.ToxicBakery.library.nsd.rx:android-nsd-rx:1.+'
+```
+
 ## Creating a Manager
 The NsdManagerRx can be created with a context instance.
 
