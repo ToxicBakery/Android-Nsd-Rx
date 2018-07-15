@@ -1,15 +1,33 @@
 package com.toxicbakery.application.nsd.rx
 
 import android.net.nsd.NsdServiceInfo
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import kotlin.properties.Delegates
 
 class DiscoveryAdapter : RecyclerView.Adapter<DiscoveryViewHolder>() {
 
-    private val items: MutableList<DiscoveryRecord> = mutableListOf()
+    private fun <T> RecyclerView.Adapter<*>.autoNotify(old: List<T>, new: List<T>, compare: (T, T) -> Boolean) {
+        DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+                    compare(old[oldItemPosition], new[newItemPosition])
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+                    old[oldItemPosition] == new[newItemPosition]
+
+            override fun getOldListSize() = old.size
+
+            override fun getNewListSize() = new.size
+        }).dispatchUpdatesTo(this)
+    }
+
+    private var items: List<DiscoveryRecord> by Delegates.observable(emptyList()) { _, old, new ->
+        autoNotify(old, new) { left, right -> left.name == right.name }
+    }
 
     override fun onBindViewHolder(holder: DiscoveryViewHolder, position: Int) {
         holder.bind(items[position])
@@ -24,19 +42,19 @@ class DiscoveryAdapter : RecyclerView.Adapter<DiscoveryViewHolder>() {
 
     fun addItem(discoveryRecord: DiscoveryRecord) {
         val count = itemCount
-        items.add(discoveryRecord)
+        items = items.plus(discoveryRecord)
         notifyItemInserted(count)
     }
 
     fun removeItem(discoveryRecord: DiscoveryRecord) {
         val count = itemCount
-        items.remove(discoveryRecord)
+        items = items.minus(discoveryRecord)
         notifyItemRemoved(count)
     }
 
     fun clear() {
         val count = itemCount
-        items.clear()
+        items = listOf()
         notifyItemRangeRemoved(0, count)
     }
 

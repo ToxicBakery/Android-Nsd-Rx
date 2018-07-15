@@ -1,19 +1,15 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'org.jetbrains.dokka-android'
+apply plugin: 'jacoco'
 
-static boolean isTag() {
-    def tag = System.getenv('TRAVIS_TAG')
-    return !(tag == null || tag.isEmpty())
+jacoco {
+    toolVersion = '0.8.0'
 }
 
-String getVersionString() {
-    String buildNumber = System.getenv('TRAVIS_BUILD_NUMBER') ?: "0"
-    String version = project.property('pom.version').replaceAll(".(0)\$", "." + buildNumber)
-    return isTag() ? version : version + "-SNAPSHOT"
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
 }
-
-group = 'com.toxicbakery.library.nsd.rx'
-version = getVersionString()
 
 repositories {
     google()
@@ -23,13 +19,16 @@ repositories {
 
 android {
     compileSdkVersion 27
-    buildToolsVersion = "27.0.1"
+    buildToolsVersion = "27.0.3"
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 27
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -46,7 +45,7 @@ android {
 }
 
 dependencies {
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
 
     def mockitoVersion = "2.7.22"
     androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
@@ -54,9 +53,85 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
-    implementation "io.reactivex.rxjava2:rxjava:2.1.6"
-    implementation "com.android.support:support-annotations:27.0.1"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "io.reactivex.rxjava2:rxjava:2.1.9"
+    implementation "com.android.support:support-annotations:27.1.1"
 }
 
-apply from: 'publish.gradle'
+dokka {
+    noStdlibLink = false
+    includeNonPublic = false
+    skipEmptyPackages = true
+    outputFormat = 'html'
+    outputDirectory = "$buildDir/javadoc"
+}
+
+afterEvaluate { project ->
+    task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaAndroidTask) {
+        outputFormat = 'javadoc'
+        outputDirectory = "$buildDir/javadoc"
+        inputs.dir 'src/main/java'
+    }
+
+    task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
+        classifier = 'javadoc'
+        from "$buildDir/javadoc"
+    }
+
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from android.sourceSets.main.java.srcDirs
+    }
+
+    artifacts {
+        archives sourcesJar
+        archives javadocJar
+    }
+}
+
+task jacocoUnitTestReport(type: JacocoReport, group: 'verification', dependsOn: ['testDebugUnitTest']) {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
+    def debugTree = fileTree(dir: "$project.buildDir/intermediates/classes/debug", excludes: fileFilter)
+    def mainSrc = "$project.projectDir/src/main/java"
+
+    sourceDirectories = files([mainSrc])
+    classDirectories = files([debugTree])
+    executionData = fileTree(dir: project.buildDir, includes: [
+            'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'
+    ])
+}
+
+task jacocoFullTestReport(type: JacocoReport, group: 'verification', dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
+    def debugTree = fileTree(dir: "$project.buildDir/intermediates/classes/debug", excludes: fileFilter)
+    def mainSrc = "$project.projectDir/src/main/java"
+
+    sourceDirectories = files([mainSrc])
+    classDirectories = files([debugTree])
+    executionData = fileTree(dir: project.buildDir, includes: [
+            'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'
+    ])
+}
+
+task copyAndroidCoverage(type: Copy) {
+    /*afterEvaluate {
+        dependsOn jacocoFullTestReport
+    }*/
+    from 'build/reports/jacoco/jacocoFullTestReport/jacocoFullTestReport.xml'
+    into './'
+    rename { String fileName ->
+        fileName = "integration.xml"
+    }
+}
+
+apply from: "${rootDir}/publish.gradle"

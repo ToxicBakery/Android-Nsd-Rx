@@ -1,4 +1,4 @@
-# Android Network Service Discovery Rx
+# Android Network Service Discovery Rx [![CircleCI](https://circleci.com/gh/ToxicBakery/Android-Nsd-Rx.svg?style=svg)](https://circleci.com/gh/ToxicBakery/Android-Nsd-Rx)
 An Rx wrapper around the Android [NsdManager](https://developer.android.com/reference/android/net/nsd/NsdManager.html) api.
 
 ## Creating a Manager
@@ -38,3 +38,11 @@ NsdManagerRx(context)
 
 ## Binders
 Discovery and registration return binders in their events. The binders allow the internal listener to be unregistered without disposing the observable. This is important if you want to receive the unregister and stop events from the Android NsdManager. Alternately, disposing of the observables will unregister the internal listeners.
+
+
+## Demo App
+The demo app provides a quick way to run the NSD service against your connected network.
+
+![Demo Application Screenshot][demo-app-screenshot]
+
+[demo-app-screenshot]: https://user-images.githubusercontent.com/1614281/42720862-9e983c8c-86fd-11e8-8d25-70ac04022a68.png

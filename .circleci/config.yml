@@ -1,0 +1,44 @@
+defaults: &defaults
+  working_directory: ~/repo
+  docker:
+    - image: toxicbakery/alpine-glibc-android:release-1.2.0
+  environment:
+    TERM: dumb
+
+version: 2
+jobs:
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: Execute Gradle
+          command: |
+            echo "org.gradle.parallel=false" >> gradle.properties
+            echo "kotlin.incremental=false" >> gradle.properties
+            echo $GCLOUD_SERVICE_KEY | base64 --decode > ${HOME}/client-secret.json
+            gcloud config set project android-nsd-rx-21b7a
+            gcloud --quiet components update
+            gcloud auth activate-service-account $GCLOUD_SERVICE_ACCOUNT --key-file ${HOME}/client-secret.json
+            ./gradlew build assembleAndroidTest check --no-daemon -PdisablePreDex
+            gcloud firebase test android run --type instrumentation --app app/build/outputs/apk/debug/app-debug.apk --test android-nsd-rx/build/outputs/apk/androidTest/debug/android-nsd-rx-debug-androidTest.apk --timeout 1m --no-record-video --no-performance-metrics --environment-variables coverage=true,coverageFile="/sdcard/coverage.ec" --directories-to-pull /sdcard
+            gsDir=`gsutil ls gs://test-lab-3dnixik4757w2-hitq28hrtzfw2/ | tail -1`
+            gsutil -m cp -r -U $gsDir . | true
+            find `basename $gsDir` -type f -iname "*.ec" -print0 | while IFS= read -r -d $'\0' line; do cp $line $(basename $line); done
+            bash <(curl -s https://codecov.io/bash)
+            if [ "master" = "$CIRCLE_BRANCH" ] || [ ! -z "$CIRCLE_TAG" ]; then
+              echo "signing.keyId=${SIGNING_KEY}" >> "gradle.properties"
+              echo "signing.password=${SIGNING_PASSWORD}" >> "gradle.properties"
+              echo "signing.secretKeyRingFile=../maven.keystore" >> "gradle.properties"
+              gpg --cipher-algo AES256 --yes --batch --passphrase=$ENC_FILE_KEY maven.keystore.gpg
+              ./gradlew uploadArchives --no-daemon -PdisablePreDex
+            fi
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+          context: Sonatype
+          filters:
+            tags:
+              only: /.*/
