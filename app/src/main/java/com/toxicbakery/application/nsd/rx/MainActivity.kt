@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     private val adapter: DiscoveryAdapter by lazy { DiscoveryAdapter() }
     private var subscription: Disposable = Disposables.disposed()
 
-    fun <T : View> Activity.bind(@IdRes id: Int) = lazy { findViewById<T>(id) }
+    private fun <T : View> Activity.bind(@IdRes id: Int) = lazy { findViewById<T>(id) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,18 +48,18 @@ class MainActivity : AppCompatActivity() {
         stopDiscovery()
     }
 
-    fun updateUI() {
+    private fun updateUI() {
         statusTextView.setText(
                 if (subscription.isDisposed) R.string.activity_main_status_discovery_off
                 else R.string.activity_main_status_discovery_on)
     }
 
-    fun toggle() {
+    private fun toggle() {
         if (subscription.isDisposed) startDiscovery()
         else stopDiscovery()
     }
 
-    fun startDiscovery() {
+    private fun startDiscovery() {
         subscription = nsdManagerRx.discoverServices(DiscoveryConfiguration("_services._dns-sd._udp"))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
         updateUI()
     }
 
-    fun stopDiscovery() {
+    private fun stopDiscovery() {
         subscription.dispose()
         updateUI()
         adapter.clear()
