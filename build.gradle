@@ -22,6 +22,6 @@ allprojects {
     boolean isTag = tagName != null && !tagName.isEmpty()
     String buildNumber = System.getenv('CIRCLE_BUILD_NUM') ?: "0"
 
-    group 'com.toxicbakery.library.nsd.rx'
+    group 'com.ToxicBakery.library.nsd.rx'
     version "1.0.${buildNumber}" + (isTag ? "" : "-SNAPSHOT")
 }
