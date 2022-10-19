@@ -1,7 +1,6 @@
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.toxicbakery.application.nsd.rx">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Requirement for firebase cloud testing to write jacoco to the sdcard on test devices -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>

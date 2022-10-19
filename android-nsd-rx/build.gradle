@@ -19,7 +19,6 @@ repositories {
 
 android {
     compileSdkVersion 27
-    buildToolsVersion = "27.0.3"
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 27
@@ -42,6 +41,7 @@ android {
             java.srcDir 'src/sharedTest/java'
         }
     }
+    namespace 'com.toxicbakery.library.nsd.rx'
 }
 
 dependencies {
@@ -99,9 +99,9 @@ task jacocoUnitTestReport(type: JacocoReport, group: 'verification', dependsOn: 
     def debugTree = fileTree(dir: "$project.buildDir/intermediates/classes/debug", excludes: fileFilter)
     def mainSrc = "$project.projectDir/src/main/java"
 
-    sourceDirectories = files([mainSrc])
-    classDirectories = files([debugTree])
-    executionData = fileTree(dir: project.buildDir, includes: [
+    sourceDirectories.from = files([mainSrc])
+    classDirectories.from = files([debugTree])
+    executionData.from = fileTree(dir: project.buildDir, includes: [
             'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'
     ])
 }
@@ -116,9 +116,9 @@ task jacocoFullTestReport(type: JacocoReport, group: 'verification', dependsOn: 
     def debugTree = fileTree(dir: "$project.buildDir/intermediates/classes/debug", excludes: fileFilter)
     def mainSrc = "$project.projectDir/src/main/java"
 
-    sourceDirectories = files([mainSrc])
-    classDirectories = files([debugTree])
-    executionData = fileTree(dir: project.buildDir, includes: [
+    sourceDirectories.from = files([mainSrc])
+    classDirectories.from = files([debugTree])
+    executionData.from = fileTree(dir: project.buildDir, includes: [
             'jacoco/testDebugUnitTest.exec', 'outputs/code-coverage/connected/*coverage.ec'
     ])
 }
