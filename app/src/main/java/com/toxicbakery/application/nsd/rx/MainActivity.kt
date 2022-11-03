@@ -69,6 +69,7 @@ class MainActivity : AppCompatActivity() {
                             when (event) {
                                 is DiscoveryServiceFound -> adapter.addItem(event.service.toDiscoveryRecord())
                                 is DiscoveryServiceLost -> adapter.removeItem(event.service.toDiscoveryRecord())
+                                else -> {}
                             }
                         },
                         { Log.e(TAG, "Error starting discovery.", it) })
