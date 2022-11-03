@@ -53,7 +53,7 @@ dependencies {
 
     testImplementation 'junit:junit:4.13.2'
 
-    implementation "io.reactivex.rxjava2:rxjava:2.1.9"
+    implementation "io.reactivex.rxjava2:rxjava:2.2.21"
     implementation "com.android.support:support-annotations:27.1.1"
 }
 
