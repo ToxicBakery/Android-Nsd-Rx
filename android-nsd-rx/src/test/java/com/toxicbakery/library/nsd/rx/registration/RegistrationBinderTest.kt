@@ -2,9 +2,9 @@ package com.toxicbakery.library.nsd.rx.registration
 
 import android.net.nsd.NsdManager
 import com.toxicbakery.library.nsd.rx.INsdManagerCompat
-import com.toxicbakery.library.nsd.rx.mock
-import com.toxicbakery.library.nsd.rx.verify
 import org.junit.Test
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 
 class RegistrationBinderTest {
 
