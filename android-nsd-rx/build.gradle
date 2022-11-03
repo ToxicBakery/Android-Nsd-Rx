@@ -65,12 +65,12 @@ afterEvaluate { project ->
     }
 
     task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
-        classifier = 'javadoc'
+        archiveClassifier.set("javadoc")
         from "$buildDir/javadoc"
     }
 
     task sourcesJar(type: Jar) {
-        classifier = 'sources'
+        archiveClassifier.set("sources")
         from android.sourceSets.main.java.srcDirs
     }
 
@@ -82,8 +82,8 @@ afterEvaluate { project ->
 
 task jacocoUnitTestReport(type: JacocoReport, group: 'verification', dependsOn: ['testDebugUnitTest']) {
     reports {
-        xml.enabled = true
-        html.enabled = true
+        xml.getRequired().set(true)
+        html.getRequired().set(true)
     }
 
     def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
@@ -99,8 +99,8 @@ task jacocoUnitTestReport(type: JacocoReport, group: 'verification', dependsOn: 
 
 task jacocoFullTestReport(type: JacocoReport, group: 'verification', dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {
     reports {
-        xml.enabled = true
-        html.enabled = true
+        xml.getRequired().set(true)
+        html.getRequired().set(true)
     }
 
     def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
