@@ -3,7 +3,6 @@ apply plugin: 'kotlin-android'
 
 repositories {
     google()
-    jcenter()
     mavenCentral()
 }
 
