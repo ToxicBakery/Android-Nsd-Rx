@@ -43,46 +43,46 @@ class NsdManagerRxTest {
 
     @Test
     fun discoverServices() =
-            nsdManagerRx.discoverServices(nsdConfiguration)
-                    .subscribe()
-                    .dispose()
+        nsdManagerRx.discoverServices(nsdConfiguration)
+            .subscribe()
+            .dispose()
 
     @Test
     fun discoverServicesWithListener() {
-        nsdManagerRx.discoverServices(nsdConfiguration, { _, _ -> mock() })
-                .subscribe()
-                .dispose()
+        nsdManagerRx.discoverServices(nsdConfiguration) { _, _ -> mock() }
+            .subscribe()
+            .dispose()
     }
 
     @Test
     fun registerService() {
         nsdManagerRx.registerService(registrationConfiguration)
-                .subscribe()
-                .dispose()
+            .subscribe()
+            .dispose()
     }
 
     @Test
     fun registerServiceWithListener() {
-        nsdManagerRx.registerService(registrationConfiguration, { _, _ -> mock() })
-                .subscribe()
-                .dispose()
+        nsdManagerRx.registerService(registrationConfiguration) { _, _ -> mock() }
+            .subscribe()
+            .dispose()
     }
 
     @Test
     fun resolveService() {
         NsdServiceInfo().let {
             nsdManagerRx.resolveService(it)
-                    .subscribe()
-                    .dispose()
+                .subscribe()
+                .dispose()
         }
     }
 
     @Test
     fun resolveServiceWithListener() {
         NsdServiceInfo().let {
-            nsdManagerRx.resolveService(it, { mock() })
-                    .subscribe()
-                    .dispose()
+            nsdManagerRx.resolveService(it) { mock() }
+                .subscribe()
+                .dispose()
         }
     }
 
