@@ -29,10 +29,6 @@ android {
 }
 
 dependencies {
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-
-    testImplementation 'junit:junit:4.12'
-
     implementation project(":android-nsd-rx")
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "io.reactivex.rxjava2:rxjava:2.2.21"
