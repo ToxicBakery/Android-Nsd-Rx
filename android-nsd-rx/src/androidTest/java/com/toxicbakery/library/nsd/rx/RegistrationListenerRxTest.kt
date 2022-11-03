@@ -8,6 +8,8 @@ import io.reactivex.ObservableEmitter
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 
 /**
  * Test has to run under Instrumentation for NsdServiceInfo.toString() functionality

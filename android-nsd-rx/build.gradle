@@ -47,11 +47,10 @@ android {
 dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
 
-    def mockitoVersion = "2.7.22"
-    androidTestImplementation "org.mockito:mockito-android:$mockitoVersion"
-    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
+    androidTestImplementation "org.mockito.kotlin:mockito-kotlin:4.0.0"
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13.2'
 
     implementation "io.reactivex.rxjava2:rxjava:2.1.9"
     implementation "com.android.support:support-annotations:27.1.1"

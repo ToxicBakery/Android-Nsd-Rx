@@ -7,6 +7,8 @@ import com.toxicbakery.library.nsd.rx.resolve.ServiceResolved
 import io.reactivex.ObservableEmitter
 import org.junit.Before
 import org.junit.Test
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 
 class ResolveListenerRxTest {
 
