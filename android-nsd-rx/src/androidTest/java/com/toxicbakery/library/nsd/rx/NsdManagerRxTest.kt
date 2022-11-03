@@ -1,9 +1,8 @@
 package com.toxicbakery.library.nsd.rx
 
 import android.net.nsd.NsdServiceInfo
-import android.support.test.InstrumentationRegistry
-import android.support.test.filters.SmallTest
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import com.toxicbakery.library.nsd.rx.discovery.DiscoveryConfiguration
 import com.toxicbakery.library.nsd.rx.registration.RegistrationConfiguration
 import org.junit.After
@@ -14,7 +13,6 @@ import org.mockito.kotlin.mock
 import java.net.ServerSocket
 
 @RunWith(AndroidJUnit4::class)
-@SmallTest
 class NsdManagerRxTest {
 
     private lateinit var nsdManagerCompat: INsdManagerCompat
@@ -38,7 +36,7 @@ class NsdManagerRxTest {
 
     @Test
     fun secondConstructor() {
-        NsdManagerRx(InstrumentationRegistry.getTargetContext())
+        NsdManagerRx(InstrumentationRegistry.getInstrumentation().targetContext)
     }
 
     @Test
