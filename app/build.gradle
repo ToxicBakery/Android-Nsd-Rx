@@ -3,20 +3,18 @@ apply plugin: 'kotlin-android'
 
 repositories {
     google()
-    jcenter()
     mavenCentral()
 }
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion = "27.0.3"
+    compileSdkVersion 33
     defaultConfig {
         applicationId "com.toxicbakery.application.nsd.rx"
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
         debug {
@@ -27,21 +25,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    namespace 'com.toxicbakery.application.nsd.rx'
 }
 
 dependencies {
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-
-    testImplementation 'junit:junit:4.12'
-
     implementation project(":android-nsd-rx")
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "io.reactivex.rxjava2:rxjava:2.1.9"
-    implementation "io.reactivex.rxjava2:rxandroid:2.0.2"
-    implementation "com.android.support:support-annotations:27.1.1"
+    implementation "io.reactivex.rxjava2:rxjava:2.2.21"
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
+    implementation 'androidx.annotation:annotation:1.5.0'
 
-    def supportVersion = "27.1.1"
-    implementation "com.android.support:appcompat-v7:$supportVersion"
-    implementation "com.android.support:recyclerview-v7:$supportVersion"
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 }

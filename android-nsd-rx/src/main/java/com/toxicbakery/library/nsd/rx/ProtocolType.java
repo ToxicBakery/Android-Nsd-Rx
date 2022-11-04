@@ -1,7 +1,7 @@
 package com.toxicbakery.library.nsd.rx;
 
 import android.net.nsd.NsdManager;
-import android.support.annotation.IntDef;
+import androidx.annotation.IntDef;
 
 import kotlin.annotation.Retention;
 

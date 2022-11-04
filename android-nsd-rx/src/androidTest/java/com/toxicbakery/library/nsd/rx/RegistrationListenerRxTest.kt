@@ -1,19 +1,19 @@
 package com.toxicbakery.library.nsd.rx
 
 import android.net.nsd.NsdServiceInfo
-import android.support.test.filters.SmallTest
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.toxicbakery.library.nsd.rx.registration.*
 import io.reactivex.ObservableEmitter
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 
 /**
  * Test has to run under Instrumentation for NsdServiceInfo.toString() functionality
  */
 @RunWith(AndroidJUnit4::class)
-@SmallTest
 class RegistrationListenerRxTest {
 
     private lateinit var nsdManagerCompat: INsdManagerCompat
