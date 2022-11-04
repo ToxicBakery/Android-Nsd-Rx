@@ -4,7 +4,7 @@ import android.net.nsd.NsdServiceInfo
 import com.toxicbakery.library.nsd.rx.resolve.ResolveEvent
 import com.toxicbakery.library.nsd.rx.resolve.ResolveListenerRx
 import com.toxicbakery.library.nsd.rx.resolve.ServiceResolved
-import io.reactivex.ObservableEmitter
+import io.reactivex.rxjava3.core.ObservableEmitter
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.mock

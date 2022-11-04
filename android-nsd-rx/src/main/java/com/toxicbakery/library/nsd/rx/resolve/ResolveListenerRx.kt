@@ -3,7 +3,7 @@ package com.toxicbakery.library.nsd.rx.resolve
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import com.toxicbakery.library.nsd.rx.ResolveFailedException
-import io.reactivex.ObservableEmitter
+import io.reactivex.rxjava3.core.ObservableEmitter
 
 class ResolveListenerRx(
         private val emitter: ObservableEmitter<ResolveEvent>

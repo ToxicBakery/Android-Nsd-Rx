@@ -11,8 +11,8 @@ import com.toxicbakery.library.nsd.rx.registration.RegistrationEvent
 import com.toxicbakery.library.nsd.rx.registration.RegistrationListenerRx
 import com.toxicbakery.library.nsd.rx.resolve.ResolveEvent
 import com.toxicbakery.library.nsd.rx.resolve.ResolveListenerRx
-import io.reactivex.Observable
-import io.reactivex.ObservableEmitter
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.ObservableEmitter
 
 class NsdManagerRx {
 

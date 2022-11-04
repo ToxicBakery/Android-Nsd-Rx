@@ -24,6 +24,13 @@ android {
         targetSdkVersion 33
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
     buildTypes {
         debug {
             testCoverageEnabled true
@@ -45,7 +52,7 @@ android {
 }
 
 dependencies {
-    implementation "io.reactivex.rxjava2:rxjava:2.2.21"
+    implementation "io.reactivex.rxjava3:rxjava:3.1.5"
     implementation "androidx.annotation:annotation:1.5.0"
 
     testImplementation 'junit:junit:4.13.2'

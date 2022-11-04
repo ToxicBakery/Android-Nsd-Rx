@@ -2,7 +2,7 @@ package com.toxicbakery.library.nsd.rx
 
 import android.net.nsd.NsdServiceInfo
 import com.toxicbakery.library.nsd.rx.discovery.*
-import io.reactivex.ObservableEmitter
+import io.reactivex.rxjava3.core.ObservableEmitter
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.mock
