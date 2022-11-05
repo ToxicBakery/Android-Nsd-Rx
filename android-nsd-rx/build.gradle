@@ -34,6 +34,14 @@ android {
         }
     }
     namespace 'com.toxicbakery.library.nsd.rx'
+
+    publishing {
+        singleVariant("release") {
+            // if you don't want sources/javadoc, remove these lines
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
 }
 
 dependencies {
@@ -56,24 +64,6 @@ dokkaJavadoc.configure {
             outputDirectory.set(buildDir.resolve("javadoc"))
             sourceRoots.setFrom(file("src/main/java"))
         }
-    }
-}
-
-afterEvaluate { project ->
-
-    task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
-        archiveClassifier.set("javadoc")
-        from "$buildDir/javadoc"
-    }
-
-    task sourcesJar(type: Jar) {
-        archiveClassifier.set("sources")
-        from android.sourceSets.main.java.srcDirs
-    }
-
-    artifacts {
-        archives sourcesJar
-        archives javadocJar
     }
 }
 
