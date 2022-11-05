@@ -23,5 +23,5 @@ allprojects {
     String buildNumber = System.getenv('CIRCLE_BUILD_NUM') ?: "0"
 
     group 'com.ToxicBakery.library.nsd.rx'
-    version "1.0.${buildNumber}" + (isTag ? "" : "-SNAPSHOT")
+    version "3.0.${buildNumber}" + (isTag ? "" : "-SNAPSHOT")
 }
