@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-apply plugin: 'org.jetbrains.dokka-android'
+apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'jacoco'
 
 jacoco {
@@ -47,20 +47,19 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:1.1.3"
 }
 
-dokka {
-    noStdlibLink = false
-    includeNonPublic = false
-    skipEmptyPackages = true
-    outputFormat = 'html'
-    outputDirectory = "$buildDir/javadoc"
+dokkaJavadoc.configure {
+    dokkaSourceSets {
+        named("main") {
+            noAndroidSdkLink.set(false)
+            includeNonPublic.set(false)
+            skipEmptyPackages.set(true)
+            outputDirectory.set(buildDir.resolve("javadoc"))
+            sourceRoots.setFrom(file("src/main/java"))
+        }
+    }
 }
 
 afterEvaluate { project ->
-    task dokkaJavadoc(type: org.jetbrains.dokka.gradle.DokkaAndroidTask) {
-        outputFormat = 'javadoc'
-        outputDirectory = "$buildDir/javadoc"
-        inputs.dir 'src/main/java'
-    }
 
     task javadocJar(type: Jar, dependsOn: dokkaJavadoc) {
         archiveClassifier.set("javadoc")
