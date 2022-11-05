@@ -5,6 +5,8 @@ Android [NsdManager](https://developer.android.com/reference/android/net/nsd/Nsd
 
 ## Install
 
+You can find this library on [MavenCentral](https://central.sonatype.dev/namespace/com.ToxicBakery.library.nsd.rx)
+
 ```groovy
 implementation 'com.ToxicBakery.library.nsd.rx:android-nsd-rx:3.+'
 ```
