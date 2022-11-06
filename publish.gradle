@@ -30,6 +30,8 @@ afterEvaluate { project ->
     publishing {
         publications {
             mavenJava(MavenPublication) {
+                from components.release
+
                 artifactId = POM_ARTIFACT_ID
 
                 pom {
