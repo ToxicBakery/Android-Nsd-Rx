@@ -2,23 +2,22 @@ package com.toxicbakery.application.nsd.rx
 
 import android.app.Activity
 import android.os.Bundle
-import androidx.annotation.IdRes
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import androidx.annotation.IdRes
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.toxicbakery.library.nsd.rx.NsdManagerRx
 import com.toxicbakery.library.nsd.rx.discovery.DiscoveryConfiguration
 import com.toxicbakery.library.nsd.rx.discovery.DiscoveryEvent
 import com.toxicbakery.library.nsd.rx.discovery.DiscoveryServiceFound
 import com.toxicbakery.library.nsd.rx.discovery.DiscoveryServiceLost
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.disposables.Disposables
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     private val nsdManagerRx: NsdManagerRx by lazy { NsdManagerRx(this) }
     private val adapter: DiscoveryAdapter by lazy { DiscoveryAdapter() }
-    private var subscription: Disposable = Disposables.disposed()
+    private var subscription: Disposable = Disposable.disposed()
 
     private fun <T : View> Activity.bind(@IdRes id: Int) = lazy { findViewById<T>(id) }
 

@@ -5,7 +5,7 @@ import android.net.nsd.NsdServiceInfo
 import com.toxicbakery.library.nsd.rx.INsdManagerCompat
 import com.toxicbakery.library.nsd.rx.RegistrationFailedException
 import com.toxicbakery.library.nsd.rx.UnregistrationFailedException
-import io.reactivex.ObservableEmitter
+import io.reactivex.rxjava3.core.ObservableEmitter
 
 internal data class RegistrationListenerRx(
         private val nsdManagerCompat: INsdManagerCompat,

@@ -3,7 +3,7 @@ package com.toxicbakery.library.nsd.rx
 import android.net.nsd.NsdServiceInfo
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.toxicbakery.library.nsd.rx.registration.*
-import io.reactivex.ObservableEmitter
+import io.reactivex.rxjava3.core.ObservableEmitter
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
