@@ -1,4 +1,6 @@
-# Android Network Service Discovery Rx [![CircleCI](https://circleci.com/gh/ToxicBakery/Android-Nsd-Rx.svg?style=svg)](https://circleci.com/gh/ToxicBakery/Android-Nsd-Rx)
+# Android Network Service Discovery Rx 
+[![CircleCI](https://circleci.com/gh/ToxicBakery/Android-Nsd-Rx.svg?style=svg)](https://circleci.com/gh/ToxicBakery/Android-Nsd-Rx)
+[![Central](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fcom%2FToxicBakery%2Flibrary%2Fnsd%2Frx%2Fandroid-nsd-rx%2Fmaven-metadata.xml)](https://central.sonatype.dev/namespace/com.ToxicBakery.library.nsd.rx)
 
 An Rx wrapper around the
 Android [NsdManager](https://developer.android.com/reference/android/net/nsd/NsdManager.html) api.
