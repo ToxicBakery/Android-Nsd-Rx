@@ -10,14 +10,16 @@ import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.toxicbakery.library.nsd.rx.NsdManagerRx
+import com.toxicbakery.library.nsd.rx.NsdManagerFlow
 import com.toxicbakery.library.nsd.rx.discovery.DiscoveryConfiguration
 import com.toxicbakery.library.nsd.rx.discovery.DiscoveryEvent
 import com.toxicbakery.library.nsd.rx.discovery.DiscoveryServiceFound
 import com.toxicbakery.library.nsd.rx.discovery.DiscoveryServiceLost
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,9 +27,9 @@ class MainActivity : AppCompatActivity() {
     private val statusTextView: TextView by bind(R.id.status)
     private val recyclerView: RecyclerView by bind(R.id.recycler_view)
 
-    private val nsdManagerRx: NsdManagerRx by lazy { NsdManagerRx(this) }
+    private val nsdManagerRx: NsdManagerFlow by lazy { NsdManagerFlow(this) }
     private val adapter: DiscoveryAdapter by lazy { DiscoveryAdapter() }
-    private var subscription: Disposable = Disposable.disposed()
+    private var jobState = MutableStateFlow<Job?>(null)
 
     private fun <T : View> Activity.bind(@IdRes id: Int) = lazy { findViewById<T>(id) }
 
@@ -54,35 +56,37 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateUI() {
         statusTextView.setText(
-                if (subscription.isDisposed) R.string.activity_main_status_discovery_off
-                else R.string.activity_main_status_discovery_on)
+            if (jobState.value == null) R.string.activity_main_status_discovery_off
+            else R.string.activity_main_status_discovery_on
+        )
     }
 
     private fun toggle() {
-        if (subscription.isDisposed) startDiscovery()
+        if (jobState.value == null) startDiscovery()
         else stopDiscovery()
     }
 
     private fun startDiscovery() {
-        subscription = nsdManagerRx.discoverServices(DiscoveryConfiguration("_services._dns-sd._udp"))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { event: DiscoveryEvent ->
-                            Log.d(TAG, "Event $event")
-                            when (event) {
-                                is DiscoveryServiceFound -> adapter.addItem(event.service.toDiscoveryRecord())
-                                is DiscoveryServiceLost -> adapter.removeItem(event.service.toDiscoveryRecord())
-                                else -> {}
-                            }
-                        },
-                        { Log.e(TAG, "Error starting discovery.", it) })
-
+        jobState.value = MainScope().launch {
+            nsdManagerRx.discoverServices(DiscoveryConfiguration("_services._dns-sd._udp"))
+                .catch { e -> Log.e(TAG, "Error starting discovery.", e) }
+                .collect(::addServiceFromEvent)
+        }
         updateUI()
     }
 
+    private fun addServiceFromEvent(event: DiscoveryEvent) {
+        Log.d(TAG, "Event $event")
+        when (event) {
+            is DiscoveryServiceFound -> adapter.addItem(event.service.toDiscoveryRecord())
+            is DiscoveryServiceLost -> adapter.removeItem(event.service.toDiscoveryRecord())
+            else -> {}
+        }
+    }
+
     private fun stopDiscovery() {
-        subscription.dispose()
+        jobState.value?.cancel()
+        jobState.value = null
         updateUI()
         adapter.clear()
     }
@@ -90,5 +94,4 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "MainActivity"
     }
-
 }
