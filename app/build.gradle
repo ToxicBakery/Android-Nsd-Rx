@@ -32,11 +32,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    flavorDimensions "stream"
+    productFlavors {
+        rx {
+            dimension "stream"
+        }
+        flow {
+            dimension "stream"
+        }
+    }
     namespace 'com.toxicbakery.application.nsd.rx'
 }
 
 dependencies {
-    implementation project(":android-nsd-rx")
+    implementation project(path: ":android-nsd-rx")
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "io.reactivex.rxjava3:rxjava:3.1.5"
     implementation "io.reactivex.rxjava3:rxandroid:3.0.0"

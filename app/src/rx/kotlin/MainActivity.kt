@@ -1,5 +1,3 @@
-package com.toxicbakery.application.nsd.rx
-
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +8,9 @@ import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.toxicbakery.application.nsd.rx.DiscoveryAdapter
+import com.toxicbakery.application.nsd.rx.R
+import com.toxicbakery.application.nsd.rx.toDiscoveryRecord
 import com.toxicbakery.library.nsd.rx.NsdManagerRx
 import com.toxicbakery.library.nsd.rx.discovery.DiscoveryConfiguration
 import com.toxicbakery.library.nsd.rx.discovery.DiscoveryEvent
@@ -55,7 +56,8 @@ class MainActivity : AppCompatActivity() {
     private fun updateUI() {
         statusTextView.setText(
                 if (subscription.isDisposed) R.string.activity_main_status_discovery_off
-                else R.string.activity_main_status_discovery_on)
+                else R.string.activity_main_status_discovery_on
+        )
     }
 
     private fun toggle() {
