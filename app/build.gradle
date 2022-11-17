@@ -47,11 +47,12 @@ android {
 dependencies {
     implementation project(path: ":android-nsd-rx")
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "io.reactivex.rxjava3:rxjava:3.1.5"
-    implementation "io.reactivex.rxjava3:rxandroid:3.0.0"
     implementation 'androidx.annotation:annotation:1.5.0'
-
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    rxImplementation "io.reactivex.rxjava3:rxjava:3.1.5"
+    rxImplementation "io.reactivex.rxjava3:rxandroid:3.0.0"
+    flowImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
 }
