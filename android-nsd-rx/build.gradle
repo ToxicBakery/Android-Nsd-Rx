@@ -54,20 +54,14 @@ android {
     }
 
     publishing {
-        multipleVariants {
-            allVariants()
+        singleVariant("rxRelease") {
             withSourcesJar()
             withJavadocJar()
         }
-//        multipleVariants("custom") {
-//            includeBuildTypeValues("debug", "release")
-//            withSourcesJar()
-//            withJavadocJar()
-//            includeFlavorDimensionAndValues(
-//                    "stream",
-//                    "rx", "flow"
-//            )
-//        }
+        singleVariant("flowRelease") {
+            withSourcesJar()
+            withJavadocJar()
+        }
     }
 }
 
@@ -93,6 +87,20 @@ dokkaJavadoc.configure {
             skipEmptyPackages.set(true)
             outputDirectory.set(buildDir.resolve("javadoc"))
             sourceRoots.setFrom(file("src/main/java"))
+        }
+        named("rx") {
+            noAndroidSdkLink.set(false)
+            includeNonPublic.set(false)
+            skipEmptyPackages.set(true)
+            outputDirectory.set(buildDir.resolve("javadoc"))
+            sourceRoots.setFrom(file("src/rx/java"))
+        }
+        named("flow") {
+            noAndroidSdkLink.set(false)
+            includeNonPublic.set(false)
+            skipEmptyPackages.set(true)
+            outputDirectory.set(buildDir.resolve("javadoc"))
+            sourceRoots.setFrom(file("src/flow/java"))
         }
     }
 }
