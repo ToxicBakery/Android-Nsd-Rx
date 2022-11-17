@@ -2,6 +2,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'org.jetbrains.dokka'
 apply plugin: 'jacoco'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 jacoco {
     toolVersion = '0.8.8'
@@ -52,15 +54,20 @@ android {
     }
 
     publishing {
-        multipleVariants("custom") {
-            includeBuildTypeValues("debug", "release")
+        multipleVariants {
+            allVariants()
             withSourcesJar()
             withJavadocJar()
-            includeFlavorDimensionAndValues(
-                    "stream",
-                    "rx", "flow"
-            )
         }
+//        multipleVariants("custom") {
+//            includeBuildTypeValues("debug", "release")
+//            withSourcesJar()
+//            withJavadocJar()
+//            includeFlavorDimensionAndValues(
+//                    "stream",
+//                    "rx", "flow"
+//            )
+//        }
     }
 }
 
@@ -135,4 +142,116 @@ task copyAndroidCoverage(type: Copy) {
     }
 }
 
-//apply from: "${rootDir}/publish.gradle"
+static String getTagName() { return System.getenv('CIRCLE_TAG') ?: "" }
+boolean isSnapshot() { return version.contains("SNAPSHOT") }
+static boolean isTag() { return !getTagName().isEmpty() }
+static boolean isCircle() { return System.getenv('CIRCLECI') ? true : false }
+static String getRepositoryUsername() { return System.getenv('SONATYPE_USERNAME') ?: "" }
+static String getRepositoryPassword() { return System.getenv('SONATYPE_PASSWORD') ?: "" }
+static String getBranchName() { return System.getenv('CIRCLE_BRANCH') }
+boolean isRelease() { return isTag() && !isSnapshot() }
+
+afterEvaluate { project ->
+    println "Tag ${getTagName()}"
+    println "Branch ${getBranchName()}"
+    println "Is Release ${isRelease()}"
+    println "Is Circle ${isCircle()}"
+    println "Has Username ${!getRepositoryUsername().empty}"
+    println "Has Password ${!getRepositoryPassword().empty}"
+    println "Version ${version}"
+
+    publishing {
+        publications {
+            mavenRx(MavenPublication) {
+                from components.rxRelease
+
+                artifactId = "android-nsd-rx"
+
+                pom {
+                    name = "android-nsd-rx"
+                    packaging = POM_PACKAGING
+                    description = "Android Network Service Discovery Rx"
+                    url = POM_URL
+
+                    scm {
+                        url = POM_SCM_URL
+                        connection = POM_SCM_CONNECTION
+                        developerConnection = POM_SCM_DEV_CONNECTION
+                    }
+
+                    licenses {
+                        license {
+                            name = POM_LICENCE_NAME
+                            url = POM_LICENCE_URL
+                            distribution = POM_LICENCE_DIST
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = POM_DEVELOPER_ID
+                            name = POM_DEVELOPER_NAME
+                            email = POM_DEVELOPER_EMAIL
+                            organization = POM_DEVELOPER_ORGANIZATION
+                            organizationUrl = POM_DEVELOPER_ORGANIZATION_URL
+                        }
+                    }
+                }
+            }
+            mavenFlow(MavenPublication) {
+                from components.flowRelease
+
+                artifactId = "android-nsd-flow"
+
+                pom {
+                    name = "android-nsd-flow"
+                    packaging = POM_PACKAGING
+                    description = "Android Network Service Discovery Flow"
+                    url = POM_URL
+
+                    scm {
+                        url = POM_SCM_URL
+                        connection = POM_SCM_CONNECTION
+                        developerConnection = POM_SCM_DEV_CONNECTION
+                    }
+
+                    licenses {
+                        license {
+                            name = POM_LICENCE_NAME
+                            url = POM_LICENCE_URL
+                            distribution = POM_LICENCE_DIST
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = POM_DEVELOPER_ID
+                            name = POM_DEVELOPER_NAME
+                            email = POM_DEVELOPER_EMAIL
+                            organization = POM_DEVELOPER_ORGANIZATION
+                            organizationUrl = POM_DEVELOPER_ORGANIZATION_URL
+                        }
+                    }
+                }
+            }
+        }
+
+        repositories {
+            maven {
+                def releaseRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+                def snapshotRepositoryUrl = isCircle() ? "https://oss.sonatype.org/content/repositories/snapshots" : mavenLocal().url
+                url = isRelease() ? releaseRepositoryUrl : snapshotRepositoryUrl
+
+                credentials {
+                    username = getRepositoryUsername()
+                    password = getRepositoryPassword()
+                }
+            }
+        }
+    }
+
+    signing {
+        required false
+        sign publishing.publications.mavenFlow, publishing.publications.mavenRx
+    }
+}
